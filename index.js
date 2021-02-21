@@ -38,7 +38,7 @@ app.all('/test', cors(), (req, res) => {
 
 app.get("/data/by_manufacturer/:manufacturer", async (req, res) => {
     try {
-        const parent = await getParentCompany("tide");
+        const parent = await getParentCompany(req.params.manufacturer);
         console.log("Parent company", parent);
 
         const searchEntry = await searchForCompanies(parent);
@@ -77,10 +77,10 @@ app.post('/add_barcode', async (req, res, next) => {
     })
 })
 
-app.post('/data/by_barcode', async (req, res, next) => {  // PASS IN STRING
+app.get('/data/by_barcode/:number', async (req, res, next) => {  // PASS IN STRING
     try {
         // const number = 818210418436
-        const data = await lookupBarcode(req.body.number)
+        const data = await lookupBarcode(req.params.number)
         res.send(
             data  // TITLE BRAND IMAGE
         )
