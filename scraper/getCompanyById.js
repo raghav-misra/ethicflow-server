@@ -41,9 +41,7 @@ async function getCompanyById({ id, name }) {
             }
         });
 
-        companyResult[sectionName] = {};
-
-        results.forEach(([ name, desc ]) => companyResult[sectionName][name] = desc);
+        companyResult[sectionName] = results;
     }
 
     // Divide into sections:
