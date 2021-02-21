@@ -9,7 +9,7 @@ async function findBrandOnWikipedia(query) {
     const searchDOM = new JSDOM(searchResponse.data);
 
     const searchResult = searchDOM.window.document.querySelector(".mw-search-result-heading");
-
+    
     if (!searchResult) return null;
     
     const name = searchResult.textContent;

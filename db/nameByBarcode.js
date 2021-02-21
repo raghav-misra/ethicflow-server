@@ -9,10 +9,11 @@ async function nameByBarcode(barcode) {
         q.Get(
             q.Match(
                 q.Index("name_by_barcode"), 
-                barcode
+                parseInt(barcode)
             )
         )
     )
+    console.log(query)
     return {
         data: query
     }

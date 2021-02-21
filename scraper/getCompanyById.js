@@ -13,9 +13,11 @@ async function getCompanyById({ id, name }) {
     const companyResult = { id, name };
 
     // Get letter rating:
-    const rating = window.document.querySelector(".ci-content-fullwidth")
-        ?.querySelectorAll("div[style]")[1]
-        ?.querySelector("img")?.getAttribute("alt")?.toLowerCase();
+    let rating = window.document.querySelector(".ci-content-fullwidth")
+    rating = rating && rating.querySelectorAll("div[style]")[1]
+    rating = rating && rating.querySelector("img")
+    rating = rating && rating.getAttribute("alt")
+    rating = rating && rating.toLowerCase();
     
     if (rating) {
         companyResult.rating = RATINGS[rating];
@@ -24,6 +26,10 @@ async function getCompanyById({ id, name }) {
     // Function to parse each section:
     function parseSection(section, sectionName) {
         const results = [];
+
+        if (!section) {
+            console.log("bruh that secton don't work");
+        }
 
         section.querySelectorAll("div").forEach((item, index) => {
             if (index % 2 === 0) {

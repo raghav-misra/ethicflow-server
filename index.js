@@ -10,44 +10,55 @@ const { getCompanyById } = require("./scraper/getCompanyById");
 const { searchForCompanies } = require("./scraper/searchForCompanies");
 const { saveBarcode } = require("./db/saveBarcode")
 const { lookupBarcode } = require("./db/lookupBarcode")
+const { nameByBarcode } = require('./db/nameByBarcode')
 const bodyParser = require('body-parser')
 
 // Init express:
 const app = express();
 app.use(cors());
-app.use(bodyParser.json())
+app.use(bodyParser.json());
 // app.use(express.json());
+
+app.post('/name/by_barcode', async (req, res) => {
+    const comp = await nameByBarcode(req.body.barcode)
+    res.send(
+        comp
+    )
+})
+
+
 
 app.get("/", (req, res) => {
     res.send("Hello World!");
 });
 
-app.all('/test', (req, res) => {
+app.all('/test', cors(), (req, res) => {
     res.send("TESTESTEST")
 })
 
 app.get("/data/by_manufacturer/:manufacturer", async (req, res) => {
     try {
-        //Look for a parent
-        const name = await getParentCompany(req.params.manufacturer);
+        const parent = await getParentCompany("tide");
+        console.log("Parent company", parent);
 
-        //Check if it is listed
-        const ethicsSearch = await searchForCompanies(name)
+        const searchEntry = await searchForCompanies(parent);
+        console.log("Search entry", searchEntry);
 
-        if(ethicsSearch == null){
+        if(searchEntry == null){
             //Not found!
             res.json({
                 success:false,
-                error:`Could find ratings ${name}`
+                error:`Couldnt find ratings ${name}`
             })
             return;
         }
 
-        //Get ratings
-        const ratings = await getCompanyById(ethicsSearch.id)
+        const companyEntry = await getCompanyById(searchEntry);
+        console.log("Full data", companyEntry);
+
         res.json({
             success:true,
-            ratings
+            data: companyEntry
         })
 
     } catch (e) {
@@ -81,10 +92,5 @@ app.post('/data/by_barcode', async (req, res, next) => {  // PASS IN STRING
 })
 
 
-
-// Start app:
-// app.listen(6969, ( ()=> {
-//     console.log("App is listening my g")
-// }));
 
 module.exports = app

@@ -17,8 +17,8 @@ async function searchForCompanies(name) {
     const rows = window.document.querySelectorAll("tr[class]");
     
     rows && rows.forEach(item => {
-        const name = item.children[0].querySelector("a")?.textContent;
-        const url = item.children[0].querySelector("a")?.href;
+        const name = item.children[0].querySelector("a") && item.children[0].querySelector("a").textContent;
+        const url = item.children[0].querySelector("a") && item.children[0].querySelector("a").href;
         const description = item.children[1].textContent;
         const type = item.children[2].textContent;
 
@@ -31,7 +31,7 @@ async function searchForCompanies(name) {
         }
     });
 
-    return getRelevantCompany(results); // Filter best company
+    return getRelevantCompany(name, results); // Filter best company
 }
 
 module.exports = { searchForCompanies };
