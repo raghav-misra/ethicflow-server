@@ -10,8 +10,11 @@ async function findBrandOnWikipedia(query) {
 
     const searchResult = searchDOM.window.document.querySelector(".mw-search-result-heading");
 
-    const name = searchResult?.textContent;
-    const url = searchResult?.querySelector("a")?.href;
+    if (!searchResult) return null;
+    
+    const name = searchResult.textContent;
+    if (!searchResult.querySelector("a")) return null;
+    const url = searchResult.querySelector("a").href;
 
     // If it finds something,
     if (name && url) {

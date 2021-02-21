@@ -1,5 +1,6 @@
 const axios = require("axios").default;
 const { JSDOM } = require("jsdom");
+const { getRelevantCompany } = require("./getRelevantCompany");
 
 async function searchForCompanies(name) {
     // Send request:
@@ -30,7 +31,7 @@ async function searchForCompanies(name) {
         }
     });
 
-    return results;
+    return getRelevantCompany(results); // Filter best company
 }
 
 module.exports = { searchForCompanies };
